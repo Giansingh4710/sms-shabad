@@ -4,7 +4,7 @@ import timeBasedSending
 import PASSWORD
 
 class Reply():
-    def run(self, gurmukhiHukam, gurmukhiRand):
+    def sendReplies(self, gurmukhiHukam, gurmukhiRand):
         host = "imap.gmail.com"
         user = "giansingh131313@gmail.com"
         password = PASSWORD.password
@@ -26,6 +26,8 @@ class Reply():
             a = re.search("[0-9]{10}", theNumber)
             if a != None:
                     mms = self.getCarrier(carrier)
+                    if mms==carrier:
+                        continue
                     phone = theNumber + mms
             else:
                     phone=whoSent # if sent from email, phone variable is equal to the email
@@ -91,6 +93,11 @@ class Reply():
             'yahoo.com':'@yahoo.com'
             
         }
-        return opts[car]
+        ans=car
+        try:
+            ans=opts[car]
+        except Exception as e:
+            print(e)
+        return ans
 
 

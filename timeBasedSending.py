@@ -18,7 +18,7 @@ class ShabadEveryHour(Thread):
             print(f"{count}){shabad} reminder sent: {nowTime}")
             time.sleep(3600*10)
 
-
+timeToSendDailyHukam="03:40 PM"
 class IfTimeSendSms(Thread):
     # people = ["6782670271@pm.sprint.com"]
     people = [
@@ -35,7 +35,7 @@ class IfTimeSendSms(Thread):
         while True:
             a = datetime.datetime.now()
             nowTime = a.strftime("%I:%M %p")
-            if nowTime == "09:00 AM":
+            if nowTime == timeToSendDailyHukam:
                 hukam = h.getHukamnama()
                 for i in IfTimeSendSms.people:
                     sendToPhone("Daily Hukam", hukam, i)

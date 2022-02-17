@@ -1,4 +1,3 @@
-# from keepAlive import KeepAlive
 import timeBasedSending
 import getShabad
 import reply
@@ -6,25 +5,30 @@ import time
 import datetime
 
 dayCount=1
+
+#sends the hukamnama every day
+sendToEveryOne = timeBasedSending.IfTimeSendSms() 
+sendToEveryOne.start()  #thread 1
+
+#sends shabad every hour
+toMe = timeBasedSending.ShabadEveryHour()
+toMe.start()  #thread 2
+
+bani=getShabad.GetShabad()
+r = reply.Reply()
 while True:
-    # KeepAlive()
-    print(f"Day: {dayCount}\n")
-    #sends the hukamnama every day
-    sendToEveryOne = timeBasedSending.IfTimeSendSms() 
-    sendToEveryOne.start()  #thread 1
-
-    #sends shabad every hour
-    toMe = timeBasedSending.ShabadEveryHour()
-    toMe.start()  #thread 2
-
-    bani=getShabad.GetShabad()
+    #so I can get hukam daily
     hukamnam=bani.getHukamnama()
-
-    r = reply.Reply()
+    print(f"Day: {dayCount}\n")
     while True:
-        r.run(hukamnam, bani.getRandomShabad())  #main thread
-        time.sleep(5)
+        r.sendReplies(hukamnam, bani.getRandomShabad())  #main thread
         a = datetime.datetime.now()
         nowTime = a.strftime("%I:%M %p")
-        if nowTime == "09:00 AM":
+        if nowTime == timeBasedSending.timeToSendDailyHukam:
             break
+
+#run scrpit in background: nohup python3 -u ~/projects/sms-shabad/main.py &
+#look at background scripts running: ps ax |grep main.py
+# stop a script: kill PID
+# I followed this link to get it to run
+#https://janakiev.com/blog/python-background/
