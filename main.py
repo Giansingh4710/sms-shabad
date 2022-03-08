@@ -21,11 +21,16 @@ while True:
     hukamnam=bani.getHukamnama()
     print(f"Day: {dayCount}\n")
     while True:
-        r.sendReplies(hukamnam, bani.getRandomShabad())  #main thread
         a = datetime.datetime.now()
+        try:
+            r.sendReplies(hukamnam, bani)  #main thread
+        except Exception as e:
+            print(f"Failed at {a}:")
+            print(e)
         nowTime = a.strftime("%I:%M %p")
         if nowTime == timeBasedSending.timeToSendDailyHukam:
             break
+    dayCount+=1
 
 #run scrpit in background: nohup python3 -u ~/projects/sms-shabad/main.py &
 #look at background scripts running: ps ax |grep main.py

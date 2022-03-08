@@ -6,8 +6,6 @@ import getShabad
 
 class ShabadEveryHour(Thread):
     def run(self):
-	#h=smsHukam.SmsHukam()
-	#shabad=h.gurmukhiRand()
         count=0
         while True:
             count+=1
@@ -16,9 +14,9 @@ class ShabadEveryHour(Thread):
             a = datetime.datetime.now()
             nowTime = a.strftime("%I:%M %p")
             print(f"{count}){shabad} reminder sent: {nowTime}")
-            time.sleep(3600*10)
+            time.sleep(3600)
 
-timeToSendDailyHukam="03:40 PM"
+timeToSendDailyHukam="03:00 PM"
 class IfTimeSendSms(Thread):
     # people = ["6782670271@pm.sprint.com"]
     people = [

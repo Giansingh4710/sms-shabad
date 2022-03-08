@@ -1,10 +1,12 @@
 from sendMsg import sendToPhone
 import imaplib, email, re, random
 import timeBasedSending
+import datetime
 import PASSWORD
+import getShabad
 
 class Reply():
-    def sendReplies(self, gurmukhiHukam, gurmukhiRand):
+    def sendReplies(self, gurmukhiHukam, bani):
         host = "imap.gmail.com"
         user = "giansingh131313@gmail.com"
         password = PASSWORD.password
@@ -31,7 +33,9 @@ class Reply():
                     phone = theNumber + mms
             else:
                     phone=whoSent # if sent from email, phone variable is equal to the email
-            print(phone)
+            dt = datetime.datetime.now()
+            nowTime = dt.strftime("%I:%M %p")
+            print(f"{nowTime} : {phone}")
             for part in emailMessage.walk():
                 if part.get_content_type() == "text/plain" or part.get_content_type() == "text/html":
                     body = part.get_payload(decode=True)
@@ -42,11 +46,15 @@ class Reply():
                     title = "Not Valid"
                     if "1" in sentFromPhone.strip():
                         title = "Random Shabad(With Gurmukhi)"
+                        try:
+                            gurmukhiRand=bani.getRandomShabad()
+                        except Exception as e:
+                            print("Error with sending random Shabad. User Pressed 1:")
+                            print(e)
                         theShabad = gurmukhiRand
                     elif "2" in sentFromPhone.strip():
                         title = "Hukamnama fromDarbar Sahib(With Gurmukhi)"
                         theShabad = gurmukhiHukam.replace(" ","")
-
                     elif "3" in sentFromPhone.strip():
                         title = "added to daily hukamnama"
                         if phone not in timeBasedSending.IfTimeSendSms.people:
@@ -65,11 +73,10 @@ class Reply():
                     elif "options" in sentFromPhone.lower() or "5" == sentFromPhone.strip():
                         title = "Options"
                         theShabad ="1. random (get random shabad)\n2. Hukam(get Darbar Sahib Hukamnama)\n3. Get added to daily Hukamnama list. (you will recive the daily hukamnama at 10 am EST)\n4. Remove from daily Hukamnama list\n5. See Options again\n(Type the corresponding number of the option you want to select!!)"
-                    elif "$allgurmukhi" in sentFromPhone:
-                        title = "shUUU"
-                        theShabad = str(gurmukhiRand)
                     sendToPhone(title, theShabad, phone)
-                    print("sent")
+                    dt = datetime.datetime.now()
+                    nowTime = dt.strftime("%I:%M %p")
+                    print(f"sent at {nowTime}")
 
     def getCarrier(self, car):
         opts = {
