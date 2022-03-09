@@ -1,34 +1,34 @@
 import timeBasedSending
 import getShabad
 import reply
+import getTime
 import time
-import datetime
 
 dayCount=1
 
+
 #sends the hukamnama every day
-sendToEveryOne = timeBasedSending.IfTimeSendSms() 
-sendToEveryOne.start()  #thread 1
+sendToEveryOne = timeBasedSending.sendHukam().start()  #thread 1
 
 #sends shabad every hour
-toMe = timeBasedSending.ShabadEveryHour()
-toMe.start()  #thread 2
+toMe = timeBasedSending.ShabadEveryHour().start()  #thread 2
 
 bani=getShabad.GetShabad()
 r = reply.Reply()
 while True:
-    #so I can get hukam daily
+    print(f"Day) {dayCount} : {getTime.getCurrentDatetime()}")
     hukamnam=bani.getHukamnama()
-    print(f"Day: {dayCount}\n")
     while True:
-        a = datetime.datetime.now()
+        nowTime=getTime.getCurrentTime()
         try:
             r.sendReplies(hukamnam, bani)  #main thread
         except Exception as e:
-            print(f"Failed at {a}:")
+            print(f"Failed at {nowTime}")
             print(e)
-        nowTime = a.strftime("%I:%M %p")
-        if nowTime == timeBasedSending.timeToSendDailyHukam:
+        
+        if getTime.getCurrentTime()==timeBasedSending.timeToSendDailyHukam:
+            #sleepling so it doesnt keep breaking from the while loop and adding +1 to dayCount
+            time.sleep(60)
             break
     dayCount+=1
 

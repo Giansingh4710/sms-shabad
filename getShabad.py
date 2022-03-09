@@ -1,5 +1,5 @@
 import requests,json,random
-from bs4 import BeautifulSoup as bs
+# from bs4 import BeautifulSoup as bs
 from SantJiKathas import KATHAS
 
 class GetShabad():
@@ -17,7 +17,7 @@ class GetShabad():
         try:
             url="https://api.gurbaninow.com/v2/shabad/random"
             shabadJson=requests.get(url).json()
-            shabadId=shabadJson['shabadinfo']['shabadid']
+            # shabadId=shabadJson['shabadinfo']['shabadid']
             angNum=shabadJson['shabadinfo']['pageno']
             shabad=shabadJson['shabad']
             shabad=self.getShabadFromJson(shabad,angNum)
@@ -34,7 +34,7 @@ class GetShabad():
         try:
             shabadJson=requests.get(url)
             shabadJson=shabadJson.json()
-            shabadId=shabadJson['hukamnamainfo']['shabadid'][0]
+            # shabadId=shabadJson['hukamnamainfo']['shabadid'][0]
             angNum=shabadJson['hukamnamainfo']['pageno']
             hukam=shabadJson['hukamnama']
             shabad=self.getShabadFromJson(hukam,angNum)
