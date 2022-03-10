@@ -1,7 +1,6 @@
 from sendMsg import sendToPhone
 import time
 from threading import Thread
-import datetime
 import getShabad
 import getTime
 
@@ -17,8 +16,7 @@ class ShabadEveryHour(Thread):
             count+=1
             shabad = "ਵਾਹਿਗੁਰੂ"
             sendToPhone("Remember", shabad, "6782670271@pm.sprint.com")
-            a = datetime.datetime.now()
-            nowTime = a.strftime("%I:%M %p")
+            nowTime = getTime.getCurrentDatetime()
             print(f"{count}){shabad} reminder sent: {nowTime}")
             time.sleep(3600)
 

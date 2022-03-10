@@ -15,9 +15,21 @@ def write_dict_to_file():
 def removePersonToHukamList(num):
     allNumbers.pop(num)
     write_dict_to_file()
+
 def addPersonToHukamList(num):
     allNumbers[num]="Unknown"
     write_dict_to_file()
+
+def getOutputData():
+    data=""
+    with open("./nohup.out") as file:
+        lines=file.readlines()
+        startInd=0
+        if len(lines)>30:
+            startInd=len(lines)-30
+        for i in range(startInd,len(lines)):
+            data+=lines[i]
+    return data
 
 class Reply():
     def sendReplies(self, hukamnama, bani):
@@ -50,39 +62,47 @@ class Reply():
                 phone=whoSent # if sent from email, phone variable is equal to the email
 
             for part in emailMessage.walk():
+                # print(part.get_content_type())
                 if part.get_content_type() == "text/plain" or part.get_content_type() == "text/html":
                     body = part.get_payload(decode=True)
                     sentFromPhone = body.decode()
                     sentFromPhone = sentFromPhone.lower()
+                    msgFromUser = sentFromPhone.strip()
 
                     theShabad = f"Please enter a valid value. \"{sentFromPhone}\" is not a valid\n"
                     title = "Not Valid"
 
-                    if "1" in sentFromPhone.strip():
+                    if "1" in msgFromUser:
                         title = "Random Shabad (With Gurmukhi)"
                         theShabad=bani.getRandomShabad()
-                    elif "2" in sentFromPhone.strip():
+                    elif "2" in msgFromUser:
                         title = "Hukamnama from Darbar Sahib(With Gurmukhi)"
                         theShabad = hukamnama.replace(" ","")
-                    elif "3" in sentFromPhone.strip():
+                    elif "3" in msgFromUser:
                         title = "added to daily hukamnama"
                         if phone not in allNumbers:
                             addPersonToHukamList(phone)
                             theShabad = "You have been added to the daily hukamnama list."
                         else:
                             theShabad = "You are already in the Daily hukamnam list"
-                    elif "4" in sentFromPhone.strip():
+                    elif "4" in msgFromUser:
                         title = "Removed from Daily Hukamnama"
                         if phone in allNumbers:
                             removePersonToHukamList(phone)
                             theShabad = "You have been removed to the daily hukamnama list."
                         else:
                             theShabad = "You are not already in the Daily hukamnam list"
+                    elif "$SHABADLIST" == msgFromUser:
+                        title="All people in Daily Hukam List"
+                        theShabad=str(allNumbers)
+                    elif "$UPDATE" == msgFromUser:
+                        title="Last 30 lines of output"
+                        theShabad=getOutputData()
                     else:
                         theShabad ="Type the number for the corresponding action:\n1. random (get random shabad)\n2. Hukam (get Darbar Sahib Hukamnama)\n3. Get added to daily Hukamnama list. (you will recive the daily hukamnama at 10 am EST)\n4. Remove yourself from daily Hukamnama list\n"
                     
                     nowTime=getTime.getCurrentDatetime()
-                    print(f"{phone}:{sendToPhone}. Replied with {title} at {nowTime}")
+                    print(f"{phone} : {msgFromUser}. Replied with {title} at {nowTime}")
                     sendToPhone(title, theShabad, phone)
 
     def getCarrier(self, car):
