@@ -31,7 +31,7 @@ class sendHukam(Thread):
                 hukam = h.getHukamnama()
                 for num in numbers:
                     sendToPhone("Daily Hukam", hukam, num)
-                    print(f"Sent hukamnama to {numbers[num]}")
+                    print(f"Sent hukamnama to {numbers[num]} at {getTime.getCurrentDatetime()}")
                 time.sleep(60)
 
 

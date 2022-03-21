@@ -20,13 +20,13 @@ def addPersonToHukamList(num):
     allNumbers[num]="Unknown"
     write_dict_to_file()
 
-def getOutputData():
+def getOutputData(n):
     data=""
     with open("./nohup.out") as file:
         lines=file.readlines()
         startInd=0
-        if len(lines)>30:
-            startInd=len(lines)-30
+        if len(lines)>n:
+            startInd=len(lines)-n
         for i in range(startInd,len(lines)):
             data+=lines[i]
     return data
@@ -72,7 +72,38 @@ class Reply():
                     theShabad = f"Please enter a valid value. \"{sentFromPhone}\" is not a valid\n"
                     title = "Not Valid"
 
-                    if "1" in msgFromUser:
+                    if "$shabadlist" == msgFromUser:
+                        title="All people in Daily Hukam List"
+                        theShabad=str(allNumbers)
+                    elif "$update" == msgFromUser:
+                        title="Last 30 lines of output"
+                        theShabad=getOutputData(30)
+                    elif "$updatemore" == msgFromUser:
+                        title="Last 100 lines of output"
+                        theShabad=getOutputData(100)
+                    elif "$updateall" == msgFromUser:
+                        title="All the data of the output"
+                        theShabad=getOutputData(10000000000)
+                    elif "$add"==msgFromUser[:4]:
+                        phoneToAdd=msgFromUser[5:].strip()
+                        title=f"Couldn't add {phoneToAdd}"
+                        theShabad="Couldn't send message to {phoneToAdd}"
+                        try:
+                            vg="ਵਾਹਿਗੁਰੂ"
+                            sendToPhone(vg,"You have been added to daily hukamnama list!!!",phoneToAdd)
+                            if phoneToAdd not in allNumbers:
+                                addPersonToHukamList(phoneToAdd)
+                                title=f"added {phoneToAdd}"
+                                theShabad = f"{phoneToAdd} has been added to the daily hukamnama list."
+                            else:
+                                title=f"{phoneToAdd} is already in the list"
+                        except Exception as e:
+                            print(f"{theShabad}: {e}")
+                    elif "$gupt"==msgFromUser:
+                        title=""
+                        theShabad="Gupt actions:\n $shabadlist: Shows all people in Daily Hukam List\n $update: Shows last 30 lines of the output\n $updatemore: Shows last 100 lines of output\n $updateall: Shows all the data in outputfile\n $add: follow this command with a phonemuber with its MMS gateway, exp: 6782670271@pm.sprint.com\n $gupt: Get this menu"
+
+                    elif "1" in msgFromUser:
                         title = "Random Shabad (With Gurmukhi)"
                         theShabad=bani.getRandomShabad()
                     elif "2" in msgFromUser:
@@ -92,12 +123,6 @@ class Reply():
                             theShabad = "You have been removed to the daily hukamnama list."
                         else:
                             theShabad = "You are not already in the Daily hukamnam list"
-                    elif "$SHABADLIST" == msgFromUser:
-                        title="All people in Daily Hukam List"
-                        theShabad=str(allNumbers)
-                    elif "$UPDATE" == msgFromUser:
-                        title="Last 30 lines of output"
-                        theShabad=getOutputData()
                     else:
                         theShabad ="Type the number for the corresponding action:\n1. random (get random shabad)\n2. Hukam (get Darbar Sahib Hukamnama)\n3. Get added to daily Hukamnama list. (you will recive the daily hukamnama at 10 am EST)\n4. Remove yourself from daily Hukamnama list\n"
                     
