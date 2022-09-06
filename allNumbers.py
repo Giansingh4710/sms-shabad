@@ -3,7 +3,6 @@ allNumbers={
     "8622827105@pm.sprint.com"     :   "Harsimran Kaur Ji",
     "2018731477@pm.sprint.com"     :   "Satjiwan Kaur Ji",
     "5165142468@vzwpix.com"     :   "Amarveer Singh Ji",
-    "6782670271@pm.sprint.com"     :   "Daas Gian Singh",
     "6788628987@pm.sprint.com"     :   "Komalpreet Kaur Ji",
     "6786430348@pm.sprint.com"     :   "Amarpreet Kaur Ji",
     "6787990390@pm.sprint.com"     :   "Inderjit Singh Ji",
@@ -13,4 +12,7 @@ allNumbers={
     "2017471618@vzwpix.com"     :   "Jairaj Singh Ji",
     "6019408801@mms.att.net"     :   "Jujhar Singh Ji",
     "2019276063@mypixmessages.com"     :   "Sandeep Singh Ji",
+    "2018418096@vzwpix.com"     :   "Unknown",
+    "2019825213@tmomail.net"     :   "Unknown",
+    "6782670271@pm.sprint.com"     :   "Unknown",
 }

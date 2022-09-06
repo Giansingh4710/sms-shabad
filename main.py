@@ -11,7 +11,7 @@ dayCount=1
 sendToEveryOne = timeBasedSending.sendHukam().start()  #thread 1
 
 #sends shabad every hour
-toMe = timeBasedSending.ShabadEveryHour().start()  #thread 2
+# toMe = timeBasedSending.ShabadEveryHour().start()  #thread 2
 
 bani=getShabad.GetShabad()
 r = reply.Reply()
